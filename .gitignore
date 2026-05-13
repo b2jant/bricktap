@@ -1,0 +1,34 @@
+# --- Binaries & Build Artifacts ---
+# Ignore the compiled executable (and any Windows version)
+/bricktap
+bricktap.exe
+bin/
+
+# --- Go Specific ---
+# Ignore dependencies if you aren't "vendoring" them
+vendor/
+# Test coverage and binary outputs
+*.test
+*.out
+
+# --- OS Specific ---
+# Windows metadata (crucial for your current repo state)
+*:Zone.Identifier
+# macOS metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# --- IDEs & Editors ---
+# VS Code
+.vscode/
+# JetBrains (GoLand/IntelliJ)
+.idea/
+# Vim swap files
+*.swp
+*.swo
+
+# --- Environment & Secrets ---
+# Never commit credentials or local overrides
+.env
+.env.local

@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: enriched_orders
+    description: "Cleaned orders unnested with customer details attached."
+    columns:
+      - name: user_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_email
+      - name: total_logins
+      - name: first_active_date
