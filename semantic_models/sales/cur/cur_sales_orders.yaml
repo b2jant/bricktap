@@ -1,0 +1,16 @@
+name: cur_sales_orders
+description: "Curated sales orders fact table for reporting"
+config:
+  materialized: incremental
+  unique_key: order_id
+  incremental_strategy: merge
+base_entity:
+  ref: int_sales_orders_joined
+columns:
+  - name: order_id
+    is_primary_key: true
+  - name: amount
+  - name: status
+  - name: customer_name
+  - name: is_high_value
+    transformation: "case when amount > 1000 then true else false end"

@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: int_sales_orders_joined
+    description: "Intermediate model joining orders with customer details"
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+      - name: amount
+      - name: status
+      - name: customer_name
+      - name: customer_email

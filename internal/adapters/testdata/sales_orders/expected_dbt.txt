@@ -1,6 +1,8 @@
 --- sales_orders.sql ---
 {{ config(
-    materialized='view'
+    materialized='incremental',
+    unique_key='order_id',
+    incremental_strategy='merge'
 ) }}
 
 WITH base AS (
@@ -17,7 +19,8 @@ customers AS (
 
 SELECT
     base.order_id AS order_id,
-    base.amount AS amount
+    base.amount AS amount,
+    base.status AS status
 FROM base
 LEFT JOIN customers
   ON base.customer_id = customers.customer_id
@@ -35,4 +38,8 @@ models:
           - unique
           - not_null
       - name: amount
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['pending', 'shipped', 'delivered']
 

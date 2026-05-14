@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: stg_sales_customers
+    description: "Staging model for raw customers"
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+      - name: full_name
+      - name: email

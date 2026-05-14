@@ -56,15 +56,29 @@ func (d *DbtAdapter) generateSQL(model core.Model, dialect dialects.Dialect) (st
 
 	// Write dbt config header
 	if model.Config.Materialized != "" {
-		sb.WriteString(fmt.Sprintf("{{ config(\n    materialized='%s'\n) }}\n\n", model.Config.Materialized))
+		sb.WriteString("{{ config(\n")
+		sb.WriteString(fmt.Sprintf("    materialized='%s'", model.Config.Materialized))
+
+		if model.Config.UniqueKey != "" {
+			sb.WriteString(fmt.Sprintf(",\n    unique_key='%s'", model.Config.UniqueKey))
+		}
+		if model.Config.IncrementalStrategy != "" {
+			sb.WriteString(fmt.Sprintf(",\n    incremental_strategy='%s'", model.Config.IncrementalStrategy))
+		}
+		sb.WriteString("\n) }}\n\n")
 	}
 
 	// Build CTEs (Common Table Expressions)
 	sb.WriteString("WITH base AS (\n")
 	sb.WriteString(fmt.Sprintf("    %s\n", dialect.Select([]string{"*"})))
 
-	// Handle Base Entity as a dbt source
-	sourceRef := fmt.Sprintf("{{ source('%s', '%s') }}", model.BaseEntity.Schema, model.BaseEntity.Table)
+	// Handle Base Entity as a dbt source or ref
+	var sourceRef string
+	if model.BaseEntity.Ref != "" {
+		sourceRef = fmt.Sprintf("{{ ref('%s') }}", model.BaseEntity.Ref)
+	} else {
+		sourceRef = fmt.Sprintf("{{ source('%s', '%s') }}", model.BaseEntity.Schema, model.BaseEntity.Table)
+	}
 	sb.WriteString(fmt.Sprintf("    %s\n", dialect.From(sourceRef)))
 	sb.WriteString(")")
 
@@ -186,9 +200,23 @@ func (d *DbtAdapter) generateSchemaYML(model core.Model) string {
 				sb.WriteString(fmt.Sprintf("        description: \"%s\"\n", col.Description))
 			}
 
-			// Auto-generate primary key constraints in dbt
-			if col.IsPrimaryKey {
-				sb.WriteString("        tests:\n          - unique\n          - not_null\n")
+			hasTests := col.IsPrimaryKey || len(col.AcceptedValues) > 0
+			if hasTests {
+				sb.WriteString("        tests:\n")
+				if col.IsPrimaryKey {
+					sb.WriteString("          - unique\n          - not_null\n")
+				}
+				if len(col.AcceptedValues) > 0 {
+					sb.WriteString("          - accepted_values:\n")
+					sb.WriteString("              values: [")
+					for i, val := range col.AcceptedValues {
+						if i > 0 {
+							sb.WriteString(", ")
+						}
+						sb.WriteString(fmt.Sprintf("'%s'", val))
+					}
+					sb.WriteString("]\n")
+				}
 			}
 		}
 	}

@@ -1,0 +1,22 @@
+name: int_sales_orders_joined
+description: "Intermediate model joining orders with customer details"
+config:
+  materialized: table
+base_entity:
+  ref: stg_sales_orders
+relationships:
+  customers:
+    to_model: stg_sales_customers
+    match_on: customer_id
+columns:
+  - name: order_id
+    is_primary_key: true
+  - name: customer_id
+  - name: amount
+  - name: status
+  - name: customer_name
+    pull_from_relationship: customers
+    target_column: full_name
+  - name: customer_email
+    pull_from_relationship: customers
+    target_column: email

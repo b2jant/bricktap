@@ -1,7 +1,9 @@
 name: sales_orders
 description: "Sales orders view"
 config:
-    materialized: view
+    materialized: incremental
+    unique_key: order_id
+    incremental_strategy: merge
 base_entity:
     schema: raw_data
     table: orders
@@ -12,6 +14,12 @@ columns:
       is_primary_key: true
     - name: amount
       type: float
+    - name: status
+      type: string
+      accepted_values:
+          - pending
+          - shipped
+          - delivered
 relationships:
     customers:
         to_model: core.customers

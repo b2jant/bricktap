@@ -35,15 +35,12 @@ type model struct {
 }
 
 func initialModel() model {
+	// Auto-select dbt as the target framework for now
+	framework = "dbt"
+
 	// Define the interactive form
 	form := huh.NewForm(
 		huh.NewGroup(
-			huh.NewSelect[string]().
-				Title("Choose Target Framework").
-				Options(
-					huh.NewOption("dbt", "dbt"),
-				).
-				Value(&framework),
 			huh.NewSelect[string]().
 				Title("Target Data Warehouse?").
 				Options(

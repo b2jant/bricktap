@@ -26,13 +26,16 @@ type Model struct {
 }
 
 type ModelConfig struct {
-	Materialized string `yaml:"materialized"`
-	Dialect      string `yaml:"dialect,omitempty"`
+	Materialized        string `yaml:"materialized"`
+	Dialect             string `yaml:"dialect,omitempty"`
+	UniqueKey           string `yaml:"unique_key,omitempty"`
+	IncrementalStrategy string `yaml:"incremental_strategy,omitempty"`
 }
 
 type Entity struct {
-	Schema string `yaml:"schema"`
-	Table  string `yaml:"table"`
+	Schema string `yaml:"schema,omitempty"`
+	Table  string `yaml:"table,omitempty"`
+	Ref    string `yaml:"ref,omitempty"`
 }
 
 type Relationship struct {
@@ -56,6 +59,7 @@ type Column struct {
 	SourceColumn         string        `yaml:"source_column,omitempty"`
 	Type                 string        `yaml:"type,omitempty"`
 	IsPrimaryKey         bool          `yaml:"is_primary_key,omitempty"`
+	AcceptedValues       []string      `yaml:"accepted_values,omitempty"`
 	PullFromRelationship string        `yaml:"pull_from_relationship,omitempty"`
 	TargetColumn         string        `yaml:"target_column,omitempty"`
 	Transformation       string        `yaml:"transformation,omitempty"`

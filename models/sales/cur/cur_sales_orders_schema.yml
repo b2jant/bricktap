@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: cur_sales_orders
+    description: "Curated sales orders fact table for reporting"
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: amount
+      - name: status
+      - name: customer_name
+      - name: is_high_value

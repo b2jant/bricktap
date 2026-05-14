@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: stg_sales_orders
+    description: "Staging model for raw orders"
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+      - name: amount
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['pending', 'shipped', 'delivered']

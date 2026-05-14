@@ -1,0 +1,21 @@
+name: stg_sales_orders
+description: "Staging model for raw orders"
+config:
+  materialized: view
+base_entity:
+  schema: raw_sales
+  table: orders
+columns:
+  - name: order_id
+    type: int
+    is_primary_key: true
+  - name: customer_id
+    type: string
+  - name: amount
+    type: float
+  - name: status
+    type: string
+    accepted_values:
+      - pending
+      - shipped
+      - delivered
