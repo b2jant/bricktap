@@ -69,7 +69,8 @@ func (d *DbtAdapter) generateSQL(model core.Model, dialect dialects.Dialect) (st
 	sb.WriteString(")")
 
 	// Build CTEs for Relationships (hiding complex JOIN setup)
-	for relName, rel := range model.Relationships {
+	for _, relName := range sortedRelationships(model) {
+		rel := model.Relationships[relName]
 		sb.WriteString(fmt.Sprintf(",\n\n%s AS (\n", relName))
 		sb.WriteString(fmt.Sprintf("    %s\n", dialect.Select([]string{"*"})))
 
@@ -114,7 +115,8 @@ func (d *DbtAdapter) generateSQL(model core.Model, dialect dialects.Dialect) (st
 	sb.WriteString("\n")
 
 	// Append JOINs for Relationships
-	for relName, rel := range model.Relationships {
+	for _, relName := range sortedRelationships(model) {
+		rel := model.Relationships[relName]
 		condition := rel.MatchOnSQL
 		if condition == "" {
 			// Fallback to standard equi-join
@@ -179,6 +181,10 @@ func (d *DbtAdapter) generateSchemaYML(model core.Model) string {
 		sb.WriteString("    columns:\n")
 		for _, col := range model.Columns {
 			sb.WriteString(fmt.Sprintf("      - name: %s\n", col.Name))
+
+			if col.Description != "" {
+				sb.WriteString(fmt.Sprintf("        description: \"%s\"\n", col.Description))
+			}
 
 			// Auto-generate primary key constraints in dbt
 			if col.IsPrimaryKey {

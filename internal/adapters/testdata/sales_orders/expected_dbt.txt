@@ -1,0 +1,38 @@
+--- sales_orders.sql ---
+{{ config(
+    materialized='view'
+) }}
+
+WITH base AS (
+    SELECT
+    *
+    FROM {{ source('raw_data', 'orders') }}
+),
+
+customers AS (
+    SELECT
+    *
+    FROM {{ ref('customers') }}
+)
+
+SELECT
+    base.order_id AS order_id,
+    base.amount AS amount
+FROM base
+LEFT JOIN customers
+  ON base.customer_id = customers.customer_id
+
+--- sales_orders_schema.yml ---
+version: 2
+
+models:
+  - name: sales_orders
+    description: "Sales orders view"
+    columns:
+      - name: order_id
+        description: "The primary key of the order"
+        tests:
+          - unique
+          - not_null
+      - name: amount
+

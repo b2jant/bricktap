@@ -1,0 +1,18 @@
+name: sales_orders
+description: "Sales orders view"
+config:
+    materialized: view
+base_entity:
+    schema: raw_data
+    table: orders
+columns:
+    - name: order_id
+      type: int
+      description: "The primary key of the order"
+      is_primary_key: true
+    - name: amount
+      type: float
+relationships:
+    customers:
+        to_model: core.customers
+        match_on: customer_id

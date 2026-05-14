@@ -51,16 +51,17 @@ type Transformation struct {
 }
 
 type Column struct {
-	Name                 string         `yaml:"name"`
-	SourceColumn         string         `yaml:"source_column,omitempty"`
-	Type                 string         `yaml:"type,omitempty"`
-	IsPrimaryKey         bool           `yaml:"is_primary_key,omitempty"`
-	PullFromRelationship string         `yaml:"pull_from_relationship,omitempty"`
-	TargetColumn         string         `yaml:"target_column,omitempty"`
-	Transformation       string         `yaml:"transformation,omitempty"`
-	PartitionBy          []string       `yaml:"partition_by,omitempty"`
-	Window               *WindowConfig  `yaml:"window,omitempty"`
-	SourceExpression     string         // Injected during parsing based on global rules
+	Name                 string        `yaml:"name"`
+	Description          string        `yaml:"description,omitempty"`
+	SourceColumn         string        `yaml:"source_column,omitempty"`
+	Type                 string        `yaml:"type,omitempty"`
+	IsPrimaryKey         bool          `yaml:"is_primary_key,omitempty"`
+	PullFromRelationship string        `yaml:"pull_from_relationship,omitempty"`
+	TargetColumn         string        `yaml:"target_column,omitempty"`
+	Transformation       string        `yaml:"transformation,omitempty"`
+	PartitionBy          []string      `yaml:"partition_by,omitempty"`
+	Window               *WindowConfig `yaml:"window,omitempty"`
+	SourceExpression     string        // Injected during parsing based on global rules
 }
 
 type WindowConfig struct {

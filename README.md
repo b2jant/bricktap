@@ -13,9 +13,7 @@ Tired of writing boilerplate SQL for your data transformations? Bricktap allows 
 
 - **Interactive TUI**: Built with [Bubbletea](https://github.com/charmbracelet/bubbletea), Bricktap provides a beautiful, interactive Terminal UI to configure your code generation. No more remembering complex CLI flags!
 - **Multi-Framework Support**: Generate code ready to be dropped into:
-  - 🛠️ [dbt](https://www.getdbt.com/)
-  - 🚀 [SQLMesh](https://sqlmesh.com/)
-  - 🐻 [Bruin](https://bruin.data/)
+  - 🧱 [dbt](https://www.getdbt.com/)
 - **Dialect Aware**: Emits optimized, valid SQL for your specific data warehouse:
   - ❄️ Snowflake
   - 🔍 BigQuery
@@ -50,7 +48,7 @@ bricktap
 ```
 
 You will be greeted by the interactive configuration menu:
-1. Select your **Target Framework** (dbt, SQLMesh, Bruin).
+1. Select your **Target Framework** (dbt).
 2. Select your **Target Data Warehouse** (Snowflake, BigQuery, Postgres).
 3. Watch the magic happen as your models are parsed and written to the `./models` directory!
 

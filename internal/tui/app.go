@@ -39,11 +39,9 @@ func initialModel() model {
 	form := huh.NewForm(
 		huh.NewGroup(
 			huh.NewSelect[string]().
-				Title("Target Framework?").
+				Title("Choose Target Framework").
 				Options(
 					huh.NewOption("dbt", "dbt"),
-					huh.NewOption("SQLMesh", "sqlmesh"),
-					huh.NewOption("Bruin", "bruin"),
 				).
 				Value(&framework),
 			huh.NewSelect[string]().
@@ -105,10 +103,6 @@ func startGeneration(selectedFramework string, selectedDialect string) tea.Cmd {
 		var gen adapters.Generator
 		if selectedFramework == "dbt" {
 			gen = adapters.NewDbtAdapter()
-		} else if selectedFramework == "sqlmesh" {
-			gen = adapters.NewSqlMeshAdapter()
-		} else if selectedFramework == "bruin" {
-			gen = adapters.NewBruinAdapter()
 		} else {
 			return generationCompleteMsg{err: fmt.Errorf("framework %s not yet implemented", selectedFramework)}
 		}
